@@ -106,6 +106,7 @@ async function GenerateBuild(url, data) {
             message: commit.message,
           })),
           build: buildNumber,
+          md5: GenerateMD5(newZipFilePath)
         };
 
         // Create the build
@@ -152,6 +153,7 @@ async function GenerateBuild(url, data) {
                 message: commit.message,
               })),
               build: buildNumber,
+              md5: GenerateMD5(newZipFilePath)
             };
 
             // Create the build
@@ -173,6 +175,19 @@ async function GenerateBuild(url, data) {
   } catch (error) {
     console.error(error);
   }
+}
+
+function GenerateMD5(filePath) {
+  fs.readFile(filePath, (error, data) => {
+    if (error) {
+      console.error("Error while reading file: ", error)
+      return;
+    }
+    const hash = crypto.createHash('md5');
+    hash.update(data);
+
+    return hash.digest('hex')
+  });
 }
 
 // Function to read the config file
