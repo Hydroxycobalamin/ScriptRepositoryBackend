@@ -88,7 +88,7 @@ async function GenerateBuild(url, data) {
 
       // If no paths defined, build the entire project
       if (projectPaths.length === 0) {
-        const buildNumber = GetBuildNumber(projectName);
+        const buildNumber = GetBuildNumber(`${projectName}-${branch}`);
         const files = ReadFiles(extractPath);
         const newZipFilePath = path.join(
           buildDirectory,
@@ -134,7 +134,7 @@ async function GenerateBuild(url, data) {
 
           // Create a separate build only if there are changes within the buildPath
           if (hasChanges) {
-            const buildNumber = GetBuildNumber(projectFolder);
+            const buildNumber = GetBuildNumber(`${projectFolder}-${branch}`);
             const files = ReadFiles(path.join(extractPath, buildPath));
             const newZipFilePath = path.join(
               buildDirectory,
