@@ -5,6 +5,7 @@ import fs from "fs";
 
 import { GenerateBuild, GetBranchName } from "./functions/BuildVersioning.mjs";
 import { token } from "./config/config.mjs";
+import { updateDownloadCounter } from "./functions/DownloadCounter.mjs";
 
 const PORT = process.env.PORT || 3051;
 const app = express();
@@ -43,7 +44,9 @@ app.get("/download/:projectName/:branch/:id", function (req, res) {
     const file = `./builds/${projectName}/${branch}/${fileName}`;
     res.setHeader('Content-Type', 'application/zip');
     res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
-    res.download(file); // Set disposition and send it.
+    res.download(file);
+    updateDownloadCounter(projectName, branch, buildId);
+    console.log("yay")
 });
 
 app.get("/data", (req, res) => {
