@@ -107,7 +107,7 @@ async function GenerateBuild(url, data) {
             message: commit.message,
           })),
           build: buildNumber,
-          md5: GenerateMD5(newZipFilePath)
+          md5: await GenerateMD5(newZipFilePath)
         };
 
         // Create the build
@@ -154,9 +154,8 @@ async function GenerateBuild(url, data) {
                 message: commit.message,
               })),
               build: buildNumber,
-              md5: GenerateMD5(newZipFilePath)
+              md5: await GenerateMD5(newZipFilePath)
             };
-
             // Create the build
             CreateBuild(finalProjectName, branch, buildNumber, buildData);
           }
@@ -179,15 +178,18 @@ async function GenerateBuild(url, data) {
 }
 
 function GenerateMD5(filePath) {
-  fs.readFile(filePath, (error, data) => {
-    if (error) {
-      console.error("Error while reading file: ", error)
-      return;
-    }
-    const hash = crypto.createHash('md5');
-    hash.update(data);
-
-    return hash.digest('hex')
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (error, data) => {
+      if (error) {
+        console.error("Error while reading file: ", error);
+        reject(error);
+        return;
+      }
+      const hash = crypto.createHash('md5');
+      hash.update(data);
+      const md5Hash = hash.digest('hex');
+      resolve(md5Hash);
+    });
   });
 }
 
