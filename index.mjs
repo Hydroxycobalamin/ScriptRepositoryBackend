@@ -6,7 +6,7 @@ import fs from "fs";
 import { GenerateBuild, GetBranchName } from "./functions/BuildVersioning.mjs";
 import { token } from "./config/config.mjs";
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3051;
 const app = express();
 
 app.use(cors());
