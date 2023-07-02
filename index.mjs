@@ -23,7 +23,7 @@ app.post("/build", async (req, res) => {
 
         if (expectedSignature === calculatedSignature) {
             const url = req.body.repository.html_url;
-            await GenerateBuild(url, req.body.ref);
+            await GenerateBuild(url, req.body);
             res.status(200).json({ message: "Build successful" });
         } else {
             console.log("Signature is invalid");
