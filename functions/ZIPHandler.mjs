@@ -60,9 +60,9 @@ function ZipFiles(files, zipFilePath) {
             fs.mkdirSync(zipDirectory, { recursive: true });
         }
         zip.writeZip(zipFilePath);
-        console.log("Dateien erfolgreich in ZIP-Datei gepackt.");
+        console.log("Files sucessfully zipped.");
     } catch (error) {
-        console.error("Fehler beim Erstellen der ZIP-Datei:", error);
+        console.error("Error while zipping files: ", error);
         throw error;
     }
 }

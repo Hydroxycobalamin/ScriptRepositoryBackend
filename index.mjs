@@ -46,7 +46,6 @@ app.get("/download/:projectName/:branch/:id", function (req, res) {
     res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
     res.download(file);
     updateDownloadCounter(projectName, branch, buildId);
-    console.log("yay")
 });
 
 app.get("/data", (req, res) => {

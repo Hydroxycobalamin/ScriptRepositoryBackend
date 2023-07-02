@@ -116,15 +116,14 @@ async function GenerateBuild(url, data) {
           console.log(projectPaths);
           const projectFolder = path.basename(buildPath);
 
-          // Check if commits contain changes within the buildPath
-          const hasChanges = commits.some((commit) => {
-            // Check if any of the commit files have a path within the buildPath
-            const paths = [
+          // Filter commits for the current path/project
+          const pathCommits = commits.filter(commit => {
+            const commitPaths = [
               ...commit.added,
               ...commit.removed,
               ...commit.modified,
-            ]; // Combine paths from all three tabs
-            return paths.some((filePath) => {
+            ];
+            return commitPaths.some(filePath => {
               return (
                 filePath.startsWith(buildPath) ||
                 filePath.startsWith(`/${buildPath}`)
@@ -133,7 +132,7 @@ async function GenerateBuild(url, data) {
           });
 
           // Create a separate build only if there are changes within the buildPath
-          if (hasChanges) {
+          if (pathCommits.length > 0) {
             const buildNumber = GetBuildNumber(`${projectFolder}-${branch}`);
             const files = ReadFiles(path.join(extractPath, buildPath));
             const newZipFilePath = path.join(
@@ -147,7 +146,7 @@ async function GenerateBuild(url, data) {
             // Create ObjectZipFiles
             const buildData = {
               download: newZipFilePath,
-              commits: commits.map((commit) => ({
+              commits: pathCommits.map((commit) => ({
                 url: commit.url,
                 id: commit.id,
                 message: commit.message,
