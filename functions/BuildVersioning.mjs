@@ -57,7 +57,6 @@ async function GenerateBuild(url, data) {
       path.join(buildDirectory, projectName),
       projectName
     );
-    console.log(zipFilePath);
 
     // Extract the ZIP file
     const extractPath = path.join(
@@ -107,6 +106,7 @@ async function GenerateBuild(url, data) {
             message: commit.message,
           })),
           build: buildNumber,
+          timestamp: data.head_commit.timestamp,
           md5: await GenerateMD5(newZipFilePath)
         };
 
@@ -115,7 +115,6 @@ async function GenerateBuild(url, data) {
       } else {
         // Process each path for the project
         for (const buildPath of projectPaths) {
-          console.log(projectPaths);
           const projectFolder = path.basename(buildPath);
 
           // Filter commits for the current path/project
@@ -154,6 +153,7 @@ async function GenerateBuild(url, data) {
                 message: commit.message,
               })),
               build: buildNumber,
+              timestamp: data.head_commit.timestamp,
               md5: await GenerateMD5(newZipFilePath)
             };
             // Create the build
